@@ -8,8 +8,8 @@ from tracker import *
 tracker = EuclideanDistTracker()
 
 # Model, weight, and classfile
-modelconfig = "yolov4-tiny.cfg"
-modelweight = "yolov4-tiny.weights"
+modelconfig = "yolov4-320.cfg"
+modelweight = "yolov4.weights"
 classfile = "coco.names"
 classnames = open(classfile).read().strip().split("\n")
 net = cv2.dnn.readNetFromDarknet(modelconfig, modelweight)
@@ -26,9 +26,9 @@ input_size = 320
 confthreshold = 0.2
 nmsthreshold = 0.2
 
-left_x1 = 430 ; left_x2 = 510
-straight_x1 = 330 ; straight_x2 = 410
-right_x1 = 230  ; right_x2 = 310
+left_x1 = 415 ; left_x2 = 510
+straight_x1 = 315 ; straight_x2 = 415
+right_x1 = 220  ; right_x2 = 315
 line = 255
 error = 15
 
@@ -48,7 +48,7 @@ def find_center(x, y, w, h):
     return cx, cy
 
 # Update list vehicle
-detected_list = []
+detected_id = []
 right_list = [0, 0, 0, 0]
 straight_list = [0, 0, 0, 0]
 left_list = [0, 0, 0, 0]
@@ -59,8 +59,8 @@ def count_vehicle(box_id, img):
     ix, iy = center
 
     if (iy > (line - error)) and (iy < line):
-        if id not in detected_list:
-            detected_list.append(id)
+        if id not in detected_id:
+            detected_id.append(id)
             if (ix > left_x1) and (ix < left_x2):
                 left_list[index] = left_list[index]+1
             if (ix > straight_x1) and (ix < straight_x2):
@@ -133,20 +133,17 @@ def realTime():
         cv2.putText(img, "Truck:       "+str(right_list[3])+"      "+str(straight_list[3])+"      "+str(left_list[3]), (20, 100), font, font_size, font_color, font_thickness)
 
         cv2.imshow('Output', img)
-        print(detected_list)
+        print(detected_id)
         print(total_time)
         if cv2.waitKey(1) == ord('q'):
             break
 
     with open("data1.csv", "w") as f1:
         cwriter = csv.writer(f1)
-        cwriter.writerow(['Direction', 'Car', 'Motorbike', 'Bus', 'Truck'])
-        right_list.insert(0, "Right")
-        straight_list.insert(0, "Straight")
-        left_list.insert(0, "Left")
-        cwriter.writerow(right_list)
-        cwriter.writerow(straight_list)
-        cwriter.writerow(left_list)
+        detected_id.insert(0, "Name")
+        total_time.insert(0, "Waktu")
+        for i in range(len(detected_id)):
+            cwriter.writerow([detected_id[i], total_time[i]])
     f1.close()
     print("Data saved at 'data1.csv'")
 
