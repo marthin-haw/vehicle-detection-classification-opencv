@@ -1,0 +1,4 @@
+Direction,Car,Motorbike,Bus,Truck
+Right,6,0,0,0
+Straight,6,2,0,0
+Left,6,3,0,0
