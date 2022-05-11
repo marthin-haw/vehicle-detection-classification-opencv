@@ -47,6 +47,7 @@ def find_center(x, y, w, h):
     cy = y + y1
     return cx, cy
 
+# Update list vehicle
 detected_list = []
 right_list = [0, 0, 0, 0]
 straight_list = [0, 0, 0, 0]
