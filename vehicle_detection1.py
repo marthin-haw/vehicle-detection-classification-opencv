@@ -8,8 +8,8 @@ from tracker import *
 tracker = EuclideanDistTracker()
 
 # Model, weight, and classfile
-modelconfig = "yolov4-320.cfg"
-modelweight = "yolov4.weights"
+modelconfig = "yolov4-tiny.cfg"
+modelweight = "yolov4-tiny.weights"
 classfile = "coco.names"
 classnames = open(classfile).read().strip().split("\n")
 net = cv2.dnn.readNetFromDarknet(modelconfig, modelweight)
@@ -35,7 +35,7 @@ error = 15
 font = cv2.FONT_HERSHEY_SIMPLEX
 font_size = 0.5
 font_thickness = 2
-font_color = (0, 0 , 255)
+font_color = (0, 0, 255)
 colors = np.random.randint(0, 255, size=(len(classnames), 3), dtype='uint8')
 
 total_time = []
@@ -52,27 +52,34 @@ detected_id = []
 right_list = [0, 0, 0, 0]
 straight_list = [0, 0, 0, 0]
 left_list = [0, 0, 0, 0]
+direction_list = []
 
 def count_vehicle(box_id, img):
+    global detect_time
     x, y, w, h, id, index = box_id
     center = find_center(x, y, w, h)
     ix, iy = center
+    name_class = ["car", "motorbike", "bus", "truck"]
 
     if (iy > (line - error)) and (iy < line):
         if id not in detected_id:
             detected_id.append(id)
             if (ix > left_x1) and (ix < left_x2):
                 left_list[index] = left_list[index]+1
+                direction_list.append("left")
             if (ix > straight_x1) and (ix < straight_x2):
                 straight_list[index] = straight_list[index]+1
+                direction_list.append("straight")
             if (ix > right_x1) and (ix < right_x2):
                 right_list[index] = right_list[index]+1
+                direction_list.append("right")
+            detect_time = timeit.default_timer() - start_time
             total_time.append(detect_time)
+            detected_classnames.append(name_class[index])
 
     cv2.circle(img, center, 2, (0, 0, 255), -1)
 
 def postprocess(outputs, img):
-    global detect_time
     height, width = img.shape[:2]
     boxes = []
     classIds = []
@@ -90,14 +97,12 @@ def postprocess(outputs, img):
                     boxes.append([x, y, w, h])
                     classIds.append(classId)
                     confidence_scores.append(float(confidence))
-                    detect_time = timeit.default_timer() - start_time
 
     indices = cv2.dnn.NMSBoxes(boxes, confidence_scores, confthreshold, nmsthreshold)
     for i in indices.flatten():
         x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
         color = [int(c) for c in colors[classIds[i]]]
         name = classnames[classIds[i]]
-        detected_classnames.append(name)
         cv2.putText(img, f'{name.upper()} {int(confidence_scores[i]*100)}%', (x, y-10), font, 0.5, color, 1)
         cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
         detection.append([x, y, w, h, required_class_index.index(classIds[i])])
@@ -135,15 +140,19 @@ def realTime():
         cv2.imshow('Output', img)
         print(detected_id)
         print(total_time)
+        print(detected_classnames)
+        print(direction_list)
         if cv2.waitKey(1) == ord('q'):
             break
 
     with open("data1.csv", "w") as f1:
         cwriter = csv.writer(f1)
         detected_id.insert(0, "Name")
-        total_time.insert(0, "Waktu")
+        detected_classnames.insert(0, "Class")
+        direction_list.insert(0, "Direction")
+        total_time.insert(0, "Time")
         for i in range(len(detected_id)):
-            cwriter.writerow([detected_id[i], total_time[i]])
+            cwriter.writerow([detected_id[i], detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
     print("Data saved at 'data1.csv'")
 
