@@ -33,7 +33,7 @@ confthreshold = 0.2
 nmsthreshold = 0.2
 
 # Route
-intersection = "North"
+intersection = "N_"
 left = "route_11"
 straight = "route_9"
 right = "route_10"
@@ -167,7 +167,7 @@ def realTime():
         direction_list.insert(0, "Direction")
         total_time.insert(0, "Time")
         for i in range(len(detected_id)):
-            cwriter.writerow(["North_"+str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
+            cwriter.writerow([intersection+str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
     print("Data saved at 'data1.csv'")
 
