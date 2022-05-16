@@ -8,7 +8,7 @@ Proyek ini membahas tentang identifikasi kendaraan menggunakan algoritma YOLO da
 * Hasil deteksi dapat disimpan dalam bentuk .csv
 
 ## Technology Used
-* Python 3.8
+* Python 3.9
 * OpenCV
 * Numpy
 * Math
