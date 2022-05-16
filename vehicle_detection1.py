@@ -25,7 +25,7 @@ required_class_index = [2, 3, 5, 7]
 detected_classnames = []
 
 # Load video
-cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch84_20220427070000.mp4")
+cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch87_20220427070000.mp4")
 input_size = 320
 
 # Detection confidence threshold
@@ -33,17 +33,17 @@ confthreshold = 0.2
 nmsthreshold = 0.2
 
 # Route
-intersection = "N_"
-left = "route_11"
-straight = "route_9"
-right = "route_10"
+intersection = "W_"
+left = "route_2"
+straight = "route_0"
+right = "route_1"
 
 # Line to count vehicle
-start_border = 460
-end_border = 1250
-d_1 = 680
-d_2 = 945
-line = 250
+start_border = 500
+end_border = 1050
+d_1 = 690
+d_2 = 860
+line = 200
 error = 15
 
 # Update list vehicle
@@ -160,12 +160,12 @@ def realTime():
         if cv2.waitKey(1) == ord('q'):
             break
 
-    with open("data1.csv", "w") as f1:
+    with open("data1.csv", "a") as f1:
         cwriter = csv.writer(f1)
-        detected_id.insert(0, "Name")
+        '''detected_id.insert(0, "Name")
         detected_classnames.insert(0, "Class")
         direction_list.insert(0, "Direction")
-        total_time.insert(0, "Time")
+        total_time.insert(0, "Time")'''
         for i in range(len(detected_id)):
             cwriter.writerow([intersection+str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
