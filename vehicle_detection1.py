@@ -25,7 +25,7 @@ required_class_index = [2, 3, 5, 7]
 detected_classnames = []
 
 # Load video
-cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch85_20220427070000.mp4")
+cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch86_20220427070000.mp4")
 input_size = 320
 
 # Detection confidence threshold
@@ -33,16 +33,16 @@ confthreshold = 0.2
 nmsthreshold = 0.2
 
 # Route
-intersection = "S_"
-left = "route_4"
-straight = "route_3"
-right = "route_5"
+intersection = "E_"
+left = "route_7"
+straight = "route_6"
+right = "route_8"
 
 # Line to count vehicle
 start_border = 500
 end_border = 1050
-d_1 = 705
-d_2 = 860
+d_1 = 725
+d_2 = 885
 line = 270
 error = 15
 
