@@ -25,7 +25,7 @@ required_class_index = [2, 3, 5, 7]
 detected_classnames = []
 
 # Load video
-cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch87_20220427070000.mp4")
+cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch85_20220427070000.mp4")
 input_size = 320
 
 # Detection confidence threshold
@@ -33,17 +33,17 @@ confthreshold = 0.2
 nmsthreshold = 0.2
 
 # Route
-intersection = "W_"
-left = "route_2"
-straight = "route_0"
-right = "route_1"
+intersection = "S_"
+left = "route_4"
+straight = "route_3"
+right = "route_5"
 
 # Line to count vehicle
 start_border = 500
 end_border = 1050
-d_1 = 690
+d_1 = 705
 d_2 = 860
-line = 200
+line = 270
 error = 15
 
 # Update list vehicle
@@ -114,13 +114,14 @@ def postprocess(outputs, img):
                     confidence_scores.append(float(confidence))
 
     indices = cv2.dnn.NMSBoxes(boxes, confidence_scores, confthreshold, nmsthreshold)
-    for i in indices.flatten():
-        x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
-        color = [int(c) for c in colors[classIds[i]]]
-        name = classnames[classIds[i]]
-        cv2.putText(img, f'{name.upper()} {int(confidence_scores[i]*100)}%', (x, y-10), font, 0.5, color, 1)
-        cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
-        detection.append([x, y, w, h, required_class_index.index(classIds[i])])
+    if len(indices) > 0:
+        for i in indices.flatten():
+            x, y, w, h = boxes[i][0], boxes[i][1], boxes[i][2], boxes[i][3]
+            color = [int(c) for c in colors[classIds[i]]]
+            name = classnames[classIds[i]]
+            cv2.putText(img, f'{name.upper()} {int(confidence_scores[i]*100)}%', (x, y-10), font, 0.5, color, 1)
+            cv2.rectangle(img, (x, y), (x + w, y + h), color, 1)
+            detection.append([x, y, w, h, required_class_index.index(classIds[i])])
     
     boxes_ids = tracker.update(detection)
     for box_id in boxes_ids:
