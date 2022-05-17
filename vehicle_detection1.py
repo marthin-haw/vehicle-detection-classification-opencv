@@ -43,7 +43,7 @@ start_border = 500
 end_border = 1050
 d_1 = 725
 d_2 = 885
-line = 270
+line = 250
 error = 15
 
 # Update list vehicle
@@ -161,7 +161,7 @@ def realTime():
         if cv2.waitKey(1) == ord('q'):
             break
 
-    with open("data1.csv", "a") as f1:
+    with open("data.csv", "w") as f1:
         cwriter = csv.writer(f1)
         '''detected_id.insert(0, "Name")
         detected_classnames.insert(0, "Class")
@@ -170,7 +170,7 @@ def realTime():
         for i in range(len(detected_id)):
             cwriter.writerow([intersection+str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
-    print("Data saved at 'data1.csv'")
+    print("Data saved at 'data.csv'")
 
     cap.release()
     cv2.destroyAllWindows()
