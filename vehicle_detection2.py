@@ -20,7 +20,7 @@ net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
 # Load video
-video_folder = 'D:\CCTV KD COWEK\\utara'
+video_folder = 'D:\CCTV KD COWEK\\barat'
 input_size = 320
 
 # Class index for our required detection classes
@@ -34,17 +34,17 @@ confthreshold = 0.2
 nmsthreshold = 0.2
 
 # Route
-intersection = "E_"
-left = "route_7"
-straight = "route_6"
-right = "route_8"
+intersection = "W_"
+left = "route_2"
+straight = "route_0"
+right = "route_1"
 
 # Line to count vehicle
 start_border = 500
 end_border = 1050
-d_1 = 725
-d_2 = 885
-line = 270
+d_1 = 690
+d_2 = 860
+line = 200
 error = 15
 
 # Update list vehicle
@@ -129,6 +129,9 @@ def postprocess(outputs, img):
         count_vehicle(box_id, img)
 
 def realTime():
+    global start_time
+    start_time = timeit.default_timer()
+
     for video_name in os.listdir(video_folder):
         if not video_name.endswith(".mp4"):
             continue
@@ -136,12 +139,10 @@ def realTime():
 
         video = cv2.VideoCapture(video_path)
 
-        if video_path == "D:\CCTV KD COWEK\\utara\ch84_20220518000000.mp4":
-            start_frames_number = 4860
+        if video_path == "D:\CCTV KD COWEK\\barat\ch87_20220518143248.mp4":
+            start_frames_number = 40812
             video.set(cv2.CAP_PROP_POS_FRAMES, start_frames_number)
 
-        global start_time
-        start_time = timeit.default_timer()
         while True:
             success, img = video.read()
             if not success:
@@ -176,7 +177,7 @@ def realTime():
 
         video.release()
 
-    with open("data.csv", "w") as f1:
+    with open("data-barat(15-18).csv", "w") as f1:
         cwriter = csv.writer(f1)
         detected_id.insert(0, "Name")
         detected_classnames.insert(0, "Class")
@@ -186,7 +187,7 @@ def realTime():
             cwriter.writerow(
                 [intersection + str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
-    print("Data saved at 'data.csv'")
+    print("Data saved at 'data-barat(15-18).csv'")
 
     cv2.destroyAllWindows()
 
