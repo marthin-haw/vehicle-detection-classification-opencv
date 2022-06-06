@@ -18,15 +18,15 @@ net = cv2.dnn.readNetFromDarknet(modelconfig, modelweight)
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
+# Load video
+cap = cv2.VideoCapture("D:\CCTV KD COWEK\ch86_20220518052117.mp4")
+input_size = 320
+
 # Class index for our required detection classes
 required_class_index = [2, 3, 5, 7]
 
 # List every detected class
 detected_classnames = []
-
-# Load video
-cap = cv2.VideoCapture("C:\\Users\marth\Documents\Tugas Akhir\CCTV\ch86_20220427070000.mp4")
-input_size = 320
 
 # Detection confidence threshold
 confthreshold = 0.2
@@ -43,7 +43,7 @@ start_border = 500
 end_border = 1050
 d_1 = 725
 d_2 = 885
-line = 250
+line = 270
 error = 15
 
 # Update list vehicle
@@ -133,7 +133,6 @@ def realTime():
     while True:
         success, img = cap.read()
         img = cv2.resize(img, (0,0), None, 0.35, 0.35)
-        ih, iw, channels = img.shape
         blob = cv2.dnn.blobFromImage(img, 1/255, (input_size, input_size), [0, 0, 0], 1, crop=False)
         net.setInput(blob)
         layersnames = net.getLayerNames()
@@ -161,16 +160,16 @@ def realTime():
         if cv2.waitKey(1) == ord('q'):
             break
 
-    with open("data.csv", "w") as f1:
+    with open("data-timur.csv", "w") as f1:
         cwriter = csv.writer(f1)
-        '''detected_id.insert(0, "Name")
+        detected_id.insert(0, "Name")
         detected_classnames.insert(0, "Class")
         direction_list.insert(0, "Direction")
-        total_time.insert(0, "Time")'''
+        total_time.insert(0, "Time")
         for i in range(len(detected_id)):
             cwriter.writerow([intersection+str(detected_id[i]), detected_classnames[i], direction_list[i], total_time[i]])
     f1.close()
-    print("Data saved at 'data.csv'")
+    print("Data saved at 'data-timur.csv'")
 
     cap.release()
     cv2.destroyAllWindows()
