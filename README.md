@@ -5,6 +5,7 @@ Proyek ini membahas tentang identifikasi kendaraan menggunakan algoritma YOLO da
 ## Features
 * Program ini dapat mendeteksi 4 kelas kendaraan, yaitu mobil, sepedamotor, bus, dan truk.
 * Dapat menghitung kendaraan berdasarkan jenis kelasnya
+* Dapat menentukan rute dan waktu saat terhitungnya kendaraan
 * Hasil deteksi dapat disimpan dalam bentuk .csv
 
 ## Technology Used
